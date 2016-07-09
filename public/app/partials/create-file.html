@@ -1,0 +1,248 @@
+<div class="alert alert-success alert-dismissible" role="alert" data-ng-if="vm.message">
+  <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+  <strong>File saved.</strong>
+</div>
+<h2>Create File</h2>
+<hr>
+  <form>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Data Entry Clerk</label>
+          <select class="form-control">
+            <option>Shelly-Ann McFarlane</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>File End Date</label>
+          <input type="date" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <label>File Number</label>
+        <div class="form-group">
+            <input type="text" placeholder="File Number" class="form-control">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Parish</label>
+          <select class="form-control">
+            <option>Parish</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>File Activity</label>
+          <select class="form-control">
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-12">
+        <div class="form-group">
+          <label>File Title</label>
+          <input type="text" placeholder="File Title" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+      <div class="form-group">
+        <label>Property</label>
+        <textarea placeholder="Property" class="form-control"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <h4>Add Property Owner(s)</h4>
+    <div class="row">
+      <div class="col-md-6">
+      <div class="form-group">
+
+        <input type="text" placeholder="Name" data-ng-model="vm.owner"class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-success" data-ng-click="vm.addOwner()">Add</button>
+    </div>
+  </div>
+
+  <div class="well" data-ng-show="vm.ownerList.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Owner(s)</th>
+        <th></th>
+      </thead>
+      <tr data-ng-repeat="owner in vm.ownerList">
+        <td>{{$index+1}}</td>
+        <td>{{owner}}</td>
+        <td><a href data-ng-click="vm.removeOwner(owner)">Remove</a></td>
+      </tr>
+    </table>
+  </div>
+  <hr>
+  <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Volume Number</label>
+          <input type="text"
+                 placeholder="Volume Number"
+                 class="form-control"
+                 data-ng-model="vm.file.volume">
+        </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Folio Number</label>
+        <input type="text"
+               placeholder="Folio Number"
+               class="form-control"
+               data-ng-model="vm.file.folio">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <button class="btn btn-success" data-ng-click="vm.addPair()">Add</button>
+    </div>
+</div>
+
+<div class="well">
+  <table class="table table-striped">
+    <thead>
+      <th>Volume Number</th>
+      <th>Folio Number</th>
+      <th></th>
+    </thead>
+    <tr data-ng-repeat="pair in vm.volumeAndFolioList">
+      <td>{{pair.volume}}</td>
+      <td>{{pair.folio}}</td>
+      <td><a href data-ng-click="vm.removePair(pair)">Remove</a></td>
+    </tr>
+  </table>
+</div>
+
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group">
+      <label>Receipt Seen</label>
+      <select class="form-control" data-ng-model="vm.file.receipt" data-ng-change="vm.showControls()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3" data-ng-show="vm.hideControls">
+    <div class="form-group">
+      <label>Currency</label>
+      <select class="form-control">
+        <option>JMD</option>
+        <option>GBP</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3" data-ng-show="vm.hideControls">
+    <label>Payment Amount</label>
+    <div class="input-group">
+      <span class="input-group-addon">$</span>
+      <input type="text" placeholder="Payment Amount" class="form-control">
+      <span class="input-group-addon">.00</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4>Documents Found</h4>
+<div class="row">
+  <div class="col-md-12">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Agreements of Sale
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Surveyor's ID
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Surveyor's Report
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Surveyor's Drawing
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Certificate of Title
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Map Enclosed
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Property Tax Receipt
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Lease Agreement
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Agreement for Compensation for damage
+      </label>
+    </div>
+    <hr>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>File Start Date</label>
+            <input type="date" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Remarks</label>
+        <textarea placeholder="Enter your remarks" class="form-control"></textarea>
+      </div>
+
+      <button class="btn btn-success pull-right space-left">Submit</button>
+      <button class="btn btn-default pull-right">Cancel</button>
+  </div>
+</div>
+</form>
