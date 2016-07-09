@@ -3,40 +3,56 @@
     .module('home')
     .controller('Home', Home);
 
-    function Home(){
+    Home.$inject = ['homeService'];
+
+    function Home(homeService){
         var vm = this;
         vm.file = {};
-        vm.addOwner = addOwner;
-        vm.removeOwner = removeOwner;
-        vm.showControls = showControls;
+        vm.owner = {
+          name: "",
+          folio: "",
+          volume: ""
+        };
+        /**
+         * View settings
+         * @type {Boolean}
+         */
         vm.hideControls = false;
-        vm.file.receipt = "no";
         vm.ownerList = [];
-        vm.volumeAndFolioList = [];
-        vm.selectedUser = "";
         vm.message = true;
-        vm.dismiss = dismiss;
-        vm.addPair = addPair;
         vm.create_view = true;
         vm.file_view = false;
+        /**
+         * Controller functions
+         */
         vm.show = show;
+        vm.remove = remove;
+        vm.processForm = processForm;
+        vm.add = add;
+        vm.showControls = showControls;
+        vm.dismiss = dismiss;
+        vm.file = homeService.setFormDefaults();
+        vm.view = homeService.setViewDefaults();
         /**
          * Adds a property owner to a list
          */
-        function addOwner(){
-          var name = "none";
-          if(typeof vm.owner !== 'undefined'){
-             if(vm.owner.length > 0) name = vm.owner;
+        function add(){
+          var owner = {name: "not seen", volume: "not seen", folio: "not seen"};
+          if(typeof vm.owner.name !== 'undefined'){
+             if(vm.owner.name.length > 0)
+             owner = {name: vm.owner.name,
+                      volume: vm.owner.volume,
+                      folio: vm.owner.folio };
           }
-          if(!ownerExists(name)) vm.ownerList.push(name);
-          vm.owner = "";
+          if(!ownerExists(owner)) vm.ownerList.push(owner);
+          vm.owner.name = vm.owner.volume = vm.owner.folio = "";
         }
         /**
          * Removes a property owner by name
          * @param  {[type]} owner Name of property owner
          * @return {[type]}       [description]
          */
-        function removeOwner(owner){
+        function remove(owner){
           var len = vm.ownerList.length;
           while(len--){
             if(vm.ownerList[len] === owner) {
@@ -44,27 +60,6 @@
             }
           }
         }
-        /**
-         * Adds a volume and folio number to a list
-         */
-        function addPair(){
-          console.log(vm.file.volume);
-          console.log(vm.file.folio);
-        }
-        /**
-         * Removes a property owner by name
-         * @param  {[type]} owner Name of property owner
-         * @return {[type]}       [description]
-         */
-        function removePair(owner){
-          var len = vm.ownerList.length;
-          while(len--){
-            if(vm.ownerList[len] === owner) {
-              removed = vm.ownerList.splice(len, 1);
-            }
-          }
-        }
-
         /**
          * Determines if a owner already exists in the list
          * @param  {[type]} owner Name of owner
@@ -74,7 +69,9 @@
           var found = false;
           var len = vm.ownerList.length;
           while(len--){
-            if(vm.ownerList[len] === owner) {
+            if(vm.ownerList[len].name === owner.name
+              && vm.ownerList[len].volume === owner.volume
+              && vm.ownerList[len].folio === owner.folio) {
               found = true;
             }
           }
@@ -108,6 +105,11 @@
             vm.create_view = false;
             vm.file_view = true;
           }
+        }
+
+        function processForm(){
+          console.log(vm.ownerList)
+          console.log(vm.file);
         }
     }
 })();
