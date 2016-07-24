@@ -122,7 +122,11 @@
 
           vm.message = true;
           vm.error_message = false;
-
+          /**
+           * [createFile description]
+           * @param  {[type]} vm.file [description]
+           * @return {[type]}         [description]
+           */
            homeService.createFile(vm.file).then(function(response){
             console.log(response);
             vm.file = {};
