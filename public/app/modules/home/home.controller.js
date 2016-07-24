@@ -19,7 +19,8 @@
          */
         vm.hideControls = false;
         vm.ownerList = [];
-        vm.message = true;
+        vm.message = false;
+        vm.error_message = false;
         vm.create_view = true;
         vm.file_view = false;
         /**
@@ -32,7 +33,6 @@
         vm.showControls = showControls;
         vm.dismiss = dismiss;
         vm.file = homeService.setFormDefaults();
-        vm.view = homeService.setViewDefaults();
         /**
          * Adds a property owner to a list
          */
@@ -91,6 +91,7 @@
          */
         function dismiss(){
           vm.message = false;
+          vm.error_message = false;
         }
         /**
          * Toggle views
@@ -106,10 +107,32 @@
             vm.file_view = true;
           }
         }
-
+        /**
+         * Creates a file from form input
+         * @return {[type]} [description]
+         */
         function processForm(){
-          console.log(vm.ownerList)
-          console.log(vm.file);
+          //add numeric validation for volume, folio, currency
+          if(vm.file.end_date === null
+            || vm.file.start_date === null
+            || vm.file.title === ""){
+              vm.error_message = true;
+              return;
+          }
+
+          vm.message = true;
+          vm.error_message = false;
+
+           homeService.createFile(vm.file).then(function(response){
+            console.log(response);
+            vm.file = {};
+            vm.file = homeService.setFormDefaults();
+            vm.ownerList = [];
+            vm.message = true;
+            vm.hideControls = false;
+          }).catch(function(error){
+            console.log('Error');
+          });
         }
     }
 })();

@@ -2,6 +2,12 @@
   <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
   <strong>File saved.</strong>
 </div>
+
+<div class="alert alert-danger alert-dismissible" role="alert" data-ng-if="vm.error_message">
+  <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+  <strong>Form not valid. Please review form before submitting.</strong>
+</div>
+
 <h2>Create File</h2>
 <hr>
   <form data-ng-submit="vm.processForm()">
@@ -16,7 +22,7 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label>File End Date</label>
+          <label>File End Date - <span class="optional-text">Optional</span></label>
           <input type="date"
                 class="form-control"
                 data-ng-model="vm.file.end_date">
@@ -26,10 +32,11 @@
 
     <div class="row">
       <div class="col-md-4">
-        <label>File Number</label>
+        <label>File Number - <span class="optional-text">Optional</span></label>
         <div class="form-group">
             <input type="text"
                    placeholder="File Number"
+                   maxlength="10"
                    class="form-control"
                    data-ng-model="vm.file.file_id">
         </div>
@@ -49,7 +56,7 @@
         <div class="form-group">
           <label>File Activity</label>
           <select class="form-control"
-                  data-ng-model="vm.file.status">
+                  data-ng-model="vm.file.activity">
             <option value="0">Inactive</option>
             <option value="1">Active</option>
           </select>
@@ -61,10 +68,12 @@
         <div class="col-md-12">
         <div class="form-group">
           <label>File Title</label>
-          <input type="text"
-                 placeholder="File Title"
-                 class="form-control"
-                 data-ng-model="vm.file.title">
+          <textarea
+           class="form-control"
+           data-ng-model="vm.file.title"
+           placeholder="File Title">
+
+          </textarea>
         </div>
       </div>
     </div>
@@ -72,20 +81,20 @@
     <div class="row">
       <div class="col-md-12">
       <div class="form-group">
-        <label>Property</label>
-        <textarea placeholder="Property"
-                  class="form-control"
-                  data-ng-model="vm.file.property">
-        </textarea>
+        <label>Property Title - <span class="optional-text">Optional</span></label>
+        <input type="text"
+               placeholder="Property Title"
+               class="form-control"
+               data-ng-model="vm.file.property_title">
       </div>
     </div>
   </div>
 
   <!-- <h4>Add Property Owner(s)</h4> -->
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-4">
       <div class="form-group">
-        <label>Property Owner</label>
+        <label>Property Owner - <span class="optional-text">Optional</span></label>
         <input type="text" placeholder="Name"
               data-ng-model="vm.owner.name"
               class="form-control">
@@ -94,9 +103,10 @@
 
     <div class="col-md-3">
       <div class="form-group">
-        <label>Volume Number</label>
+        <label>Volume Number - <span class="optional-text">Optional</span></label>
         <input type="text"
                placeholder="Volume Number"
+               maxlength="4"
                class="form-control"
                data-ng-model="vm.owner.volume">
       </div>
@@ -104,10 +114,11 @@
 
   <div class="col-md-3">
     <div class="form-group">
-      <label>Folio Number</label>
+      <label>Folio Number - <span class="optional-text">Optional</span></label>
       <input type="text"
              placeholder="Folio Number"
              class="form-control"
+             maxlength="4"
              data-ng-model="vm.owner.folio">
     </div>
   </div>
@@ -161,7 +172,8 @@
     <label>Payment Amount</label>
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" placeholder="Amount" class="form-control">
+      <input type="text" placeholder="Amt" class="form-control"
+            data-ng-model="vm.file.receipt_amount">
       <span class="input-group-addon">.00</span>
     </div>
   </div>
@@ -214,7 +226,7 @@
                data-ng-model="vm.file.survey_drawing"> Surveyor's Drawing
       </label>
     </div>
-    
+
     <div class="checkbox">
       <label>
         <input type="checkbox"
@@ -235,7 +247,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>File Start Date</label>
+            <label>File Start Date - <span class="optional-text">Optional</span></label>
             <input type="date" class="form-control" data-ng-model="vm.file.start_date">
           </div>
         </div>
@@ -243,7 +255,7 @@
       </div>
 
       <div class="form-group">
-        <label>Remarks</label>
+        <label>Remarks - <span class="optional-text">Optional</span></label>
         <textarea placeholder="Enter your remarks" class="form-control"
           data-ng-model="vm.file.remarks"></textarea>
       </div>

@@ -9,9 +9,12 @@ $dotenv->load();
 function openDBConnection(){
     $user = getenv('DB_USER');
     $pass = getenv('DB_PASS');
-    $pdo = new PDO('mysql:host='.getenv('DB_HOST').';port=3306;dbname='.getenv('DB_NAME'), $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return $pdo;
+    $host = getenv('DB_HOST');
+    $db_name = getenv('DB_NAME');
+
+      $pdo = new PDO('mysql:host='.$host.';port=3306;dbname=mwhintra', $user, $pass);
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      var_dump($pdo);
 }
 /**
  * Closes database connection
