@@ -257,3 +257,11 @@ li.list-group-item a:visited{
 	color: #333333;
 	font-weight: 100;
 }
+
+.capitalize{
+	text-transform: capitalize;
+}
+
+.to-uppercase{
+	text-transform: uppercase;
+}

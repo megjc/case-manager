@@ -8,7 +8,9 @@
     function homeService($http){
       var service = {
           createFile: createFile,
-          setFormDefaults: setFormDefaults
+          setFormDefaults: setFormDefaults,
+          getUsersByType: getUsersByType,
+          getSystemLists: getSystemLists
       };
 
       return service;
@@ -24,13 +26,31 @@
         function handleSuccess(response){ return response.data; }
         function handleError(error){ return error; }
       }
+      /**
+       * Retrieves all data entry users from the database
+       * @return {[type]} [description]
+       */
+      function getUsersByType(){
+        return $http.get('/api/v1/users?type=2')
+                    .then(handleSuccess)
+                    .catch(handleError);
+        function handleSuccess(response){ return response.data; }
+        function handleError(error){ return error; }
+      }
+      /**
+       * Retrieve all file activity tyoes
+       * @return {[type]} [description]
+       */
+      function getSystemLists(){
+        return $http.get('/api/v1/sys_lists')
+                    .then(handleSuccess)
+                    .catch(handleError);
+        function handleSuccess(response){ return response.data; }
+        function handleError(error){ return error; }
+      }
 
       function setFormDefaults(){
         var file = {
-          createdBy: "1",
-          parish: "JM-01",
-          activity: "0",
-          currency: "JMD",
           receipt: "no"
         };
         return file;

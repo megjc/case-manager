@@ -33,6 +33,31 @@
         vm.showControls = showControls;
         vm.dismiss = dismiss;
         vm.file = homeService.setFormDefaults();
+
+        /**
+         * Get lists of entities to be used by the form.
+         * @return {[type]} [description]
+         */
+        homeService.getSystemLists().then(function(lists){
+          setLists(lists);
+        }).catch(function(error){
+          vm.users = vm.activities = vm.parishes = vm.currencies = [];
+        });
+        /**
+         * Sets select lists for the form.
+         * @param {[type]} lists
+         * TODO - move to the homeService
+         */
+        function setLists(lists){
+          vm.users = lists.users;
+          vm.file.createdBy = vm.users[0];
+          vm.activities = lists.activities;
+          vm.file.activity = vm.activities[0];
+          vm.parishes = lists.parishes;
+          vm.file.parish = vm.parishes[0];
+          vm.currencies = lists.currencies;
+          vm.file.currency = vm.currencies[0];
+        }
         /**
          * Adds a property owner to a list
          */

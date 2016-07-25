@@ -15,8 +15,10 @@
       <div class="col-md-6">
         <div class="form-group">
           <label>Data Entry Clerk</label>
-          <select class="form-control" data-ng-model="vm.file.createdBy">
-            <option value="1">Shelly-Ann McFarlane</option>
+          <select class="form-control"
+          data-ng-model="vm.file.createdBy"
+          ng-options="user.name for user in vm.users">
+
           </select>
         </div>
       </div>
@@ -45,9 +47,10 @@
       <div class="col-md-4">
         <div class="form-group">
           <label>Parish</label>
-          <select class="form-control">
-            <option value="JM-01">Kingston</option>
-            <option value="JM-02">Saint Andrew</option>
+          <select class="form-control capitalize"
+                  data-ng-model="vm.file.parish"
+                  data-ng-options="parish.title for parish in vm.parishes">
+
           </select>
         </div>
       </div>
@@ -55,10 +58,9 @@
       <div class="col-md-4">
         <div class="form-group">
           <label>File Activity</label>
-          <select class="form-control"
-                  data-ng-model="vm.file.activity">
-            <option value="0">Inactive</option>
-            <option value="1">Active</option>
+          <select class="form-control capitalize"
+                  data-ng-model="vm.file.activity"
+                  ng-options="activity.title for activity in vm.activities">
           </select>
         </div>
       </div>
@@ -161,9 +163,10 @@
   <div class="col-md-3" data-ng-show="vm.hideControls">
     <div class="form-group">
       <label>Currency</label>
-      <select class="form-control" data-ng-model="vm.file.currency">
-        <option value="JMD">JMD</option>
-        <option value="GBP">GBP</option>
+      <select class="form-control to-uppercase"
+              data-ng-model="vm.file.currency"
+              data-ng-options="currency.iso_code for currency in vm.currencies">
+
       </select>
     </div>
   </div>
