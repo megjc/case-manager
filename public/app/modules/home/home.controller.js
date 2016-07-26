@@ -147,6 +147,7 @@
 
           vm.message = true;
           vm.error_message = false;
+          vm.file.owners = vm.ownerList;
           /**
            * [createFile description]
            * @param  {[type]} vm.file [description]
