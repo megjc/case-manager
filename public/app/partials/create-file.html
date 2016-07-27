@@ -1,10 +1,14 @@
-<div class="alert alert-success alert-dismissible" role="alert" data-ng-if="vm.message">
-  <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+<div class="alert alert-success alert-dismissible" role="alert"
+  data-ng-if="vm.message">
+  <button type="button" class="close" aria-label="Close"
+  data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
   <strong>File saved.</strong>
 </div>
 
-<div class="alert alert-danger alert-dismissible" role="alert" data-ng-if="vm.error_message">
-  <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+<div class="alert alert-danger alert-dismissible" role="alert"
+  data-ng-if="vm.error_message">
+  <button type="button" class="close" aria-label="Close"
+  data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
   <strong>Form not valid. Please review form before submitting.</strong>
 </div>
 
@@ -24,7 +28,8 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label>File End Date - <span class="optional-text">Optional</span></label>
+          <label>File End Date - <span class="optional-text">Optional</span>
+          </label>
           <input type="date"
                 class="form-control"
                 data-ng-model="vm.file.end_date">
@@ -83,7 +88,8 @@
     <div class="row">
       <div class="col-md-12">
       <div class="form-group">
-        <label>Property Title - <span class="optional-text">Optional</span></label>
+        <label>Property Title - <span class="optional-text">Optional</span>
+        </label>
         <input type="text"
                placeholder="Property Title"
                class="form-control"
@@ -96,7 +102,8 @@
     <div class="row">
       <div class="col-md-4">
       <div class="form-group">
-        <label>Property Owner - <span class="optional-text">Optional</span></label>
+        <label>Property Owner - <span class="optional-text">Optional</span>
+        </label>
         <input type="text" placeholder="Name"
               data-ng-model="vm.owner.name"
               class="form-control">
@@ -105,7 +112,8 @@
 
     <div class="col-md-3">
       <div class="form-group">
-        <label>Volume Number - <span class="optional-text">Optional</span></label>
+        <label>Volume Number - <span class="optional-text">Optional</span>
+        </label>
         <input type="text"
                placeholder="Volume Number"
                maxlength="4"
@@ -126,7 +134,8 @@
   </div>
 
     <div class="col-md-2">
-      <a href class="btn btn-success" style="margin-top: 25px;"data-ng-click="vm.add()">Add</a>
+      <a href class="btn btn-success" style="margin-top: 25px;"
+      data-ng-click="vm.append(vm.owner, vm.ownerList, 'owner')">Add</a>
     </div>
 
   </div>
@@ -144,28 +153,41 @@
         <td>{{owner.name}}</td>
         <td>{{owner.volume}}</td>
         <td>{{owner.folio}}</td>
-        <td><a href data-ng-click="vm.remove(owner)">Remove</a></td>
+        <td><a href data-ng-click="vm.remove(owner, vm.ownerList)">Remove</a>
+        </td>
       </tr>
     </table>
   </div>
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="form-group">
       <label>Receipt Seen</label>
-      <select class="form-control" data-ng-model="vm.file.receipt" data-ng-change="vm.showControls()">
+      <select class="form-control" data-ng-model="vm.receipt.seen"
+        data-ng-change="vm.showControls()">
         <option value="no">No</option>
         <option value="yes">Yes</option>
       </select>
     </div>
   </div>
 
-  <div class="col-md-3" data-ng-show="vm.hideControls">
+  <div class="col-md-2" data-ng-show="vm.hideControls">
     <div class="form-group">
       <label>Currency</label>
       <select class="form-control to-uppercase"
-              data-ng-model="vm.file.currency"
+              data-ng-model="vm.receipt.currency"
               data-ng-options="currency.iso_code for currency in vm.currencies">
+
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3" data-ng-show="vm.hideControls">
+    <div class="form-group">
+      <label>Receipt Type</label>
+      <select class="form-control capitalize"
+              data-ng-model="vm.receipt.type"
+              data-ng-options="receipt.title for receipt in vm.receipt_types">
 
       </select>
     </div>
@@ -176,10 +198,36 @@
     <div class="input-group">
       <span class="input-group-addon">$</span>
       <input type="text" placeholder="Amt" class="form-control"
-            data-ng-model="vm.file.receipt_amount">
+            data-ng-model="vm.receipt.amount">
       <span class="input-group-addon">.00</span>
     </div>
   </div>
+
+  <div class="col-md-2" data-ng-show="vm.hideControls">
+    <a href class="btn btn-success" style="margin-top: 25px;"
+      data-ng-disabled="vm.enableAppend"
+      data-ng-click="vm.append(vm.receipt, vm.receiptList, 'receipt')">Add</a>
+  </div>
+
+</div>
+
+<div class="well" data-ng-show="vm.receiptList.length > 0">
+  <table class="table table-striped">
+    <thead>
+      <th>#</th>
+      <th>Type</th>
+      <th>Currency</th>
+      <th>Amount</th>
+    </thead>
+    <tr data-ng-repeat="receipt in vm.receiptList">
+      <td>{{$index+1}}</td>
+      <td>{{receipt.type.title}}</td>
+      <td>{{receipt.currency.iso_code}}</td>
+      <td>{{receipt.amount}}</td>
+      <td><a href data-ng-click="vm.remove(receipt, vm.receiptList)">Remove</a>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <h4>Documents Found</h4>
@@ -188,7 +236,8 @@
 
     <div class="checkbox">
       <label>
-        <input type="checkbox" data-ng-model="vm.file.damage_compensation"> Agreement for Compensation for damage
+        <input type="checkbox" data-ng-model="vm.file.damage_compensation">
+        Agreement for Compensation for damage
       </label>
     </div>
 
@@ -207,7 +256,8 @@
 
     <div class="checkbox">
       <label>
-        <input type="checkbox" data-ng-model="vm.file.lease_agreement"> Lease Agreement
+        <input type="checkbox" data-ng-model="vm.file.lease_agreement">
+         Lease Agreement
       </label>
     </div>
 
@@ -219,7 +269,8 @@
 
     <div class="checkbox">
       <label>
-        <input type="checkbox" data-ng-model="vm.file.property_tax"> Property Tax Receipt
+        <input type="checkbox" data-ng-model="vm.file.property_tax">
+        Property Tax Receipt
       </label>
     </div>
 
@@ -230,12 +281,12 @@
       </label>
     </div>
 
-    <div class="checkbox">
+    <!-- <div class="checkbox">
       <label>
         <input type="checkbox"
                data-ng-model="vm.file.survey_id"> Surveyor's ID
       </label>
-    </div>
+    </div> -->
 
     <div class="checkbox">
       <label>
@@ -250,8 +301,10 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>File Start Date - <span class="optional-text">Optional</span></label>
-            <input type="date" class="form-control" data-ng-model="vm.file.start_date">
+            <label>File Start Date - <span class="optional-text">Optional</span>
+            </label>
+            <input type="date" class="form-control"
+            data-ng-model="vm.file.start_date">
           </div>
         </div>
         <div class="col-md-6"></div>

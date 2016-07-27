@@ -11,10 +11,12 @@ function getSystemLists($app){
     $activities = getFileActivityTypes();
     $parishes = getParishes();
     $currencies = getCurrencies();
+    $receipt_types = getReceiptTypes();
     $result = array('users' => $users,
                     'activities' => $activities,
                     'parishes' => $parishes,
-                    'currencies' => $currencies);
+                    'currencies' => $currencies,
+                    'receipt_types' => $receipt_types);
     setResponseHeader($app);
     echo json_encode($result);
   });
@@ -44,7 +46,24 @@ function getSystemLists($app){
    * @return Array List of file activity states
    */
   function getFileActivityTypes(){
-    $sql = "SELECT * FROM activities";
+    $sql = "SELECT * FROM activity_types";
+    try{
+      $db = openDBConnection();
+      $stmt = $db->prepare( $sql );
+      $stmt->execute();
+      $result = $stmt->fetchAll( PDO::FETCH_OBJ );
+      closeDBConnection( $db );
+    }catch(PDOException $e){
+      $result = '{"error":{"text":' .$e->getMessage(). '}}';
+    }
+    return $result;
+  }
+  /**
+   * Get a list of file activity states
+   * @return Array List of file activity states
+   */
+  function getReceiptTypes(){
+    $sql = "SELECT * FROM receipt_types";
     try{
       $db = openDBConnection();
       $stmt = $db->prepare( $sql );

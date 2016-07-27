@@ -8,6 +8,10 @@
     function Home(homeService){
         var vm = this;
         vm.file = {};
+        vm.receipt = {
+          currency : "jmd",
+          seen: "no"
+        };
         vm.owner = {
           name: "",
           folio: "",
@@ -19,10 +23,12 @@
          */
         vm.hideControls = false;
         vm.ownerList = [];
+        vm.receiptList = [];
         vm.message = false;
         vm.error_message = false;
         vm.create_view = true;
         vm.file_view = false;
+        vm.enableAppend = false;
         /**
          * Controller functions
          */
@@ -30,6 +36,7 @@
         vm.remove = remove;
         vm.processForm = processForm;
         vm.add = add;
+        vm.append = append;
         vm.showControls = showControls;
         vm.dismiss = dismiss;
         vm.file = homeService.setFormDefaults();
@@ -41,7 +48,7 @@
         homeService.getSystemLists().then(function(lists){
           setLists(lists);
         }).catch(function(error){
-          vm.users = vm.activities = vm.parishes = vm.currencies = [];
+          vm.users = vm.activities = vm.parishes = vm.currencies = vm.receipt_types = [];
         });
         /**
          * Sets select lists for the form.
@@ -57,6 +64,8 @@
           vm.file.parish = vm.parishes[0];
           vm.currencies = lists.currencies;
           vm.file.currency = vm.currencies[0];
+          vm.receipt_types = lists.receipt_types;
+          vm.receipt.type = vm.receipt_types[0];
         }
         /**
          * Adds a property owner to a list
@@ -73,17 +82,64 @@
           vm.owner.name = vm.owner.volume = vm.owner.folio = "";
         }
         /**
-         * Removes a property owner by name
+         * Adds an item to a given list
+         * @param  {[type]}   item          [description]
+         * @param  {[type]}   list          [description]
+         * @param  {[type]}   section_title [description]
+         * @param  {Function} cb            [description]
+         * @return {[type]}                 [description]
+         */
+        function append(item, list, section_title){
+            var list_item = angular.copy(item);
+            if(!itemExists(list_item, list))
+                list.push(list_item);
+
+            clearInput(section_title);
+        }
+        /**
+         * Clears a set of inputs for a given section of the form
+         * @param  {[type]} section_title [description]
+         * @return {[type]}               [description]
+         */
+        function clearInput(section_title){
+          switch (section_title) {
+            case 'receipt':
+              vm.receipt.currency = vm.receipt.amount = "";
+              vm.receipt.seen = "no";
+              vm.receipt.currency = "jmd";
+              vm.enableAppend = true;
+              break;
+              case 'owner':
+                vm.owner.name = vm.owner.volume = vm.owner.folio = "";
+                break;
+          }
+        }
+        /**
+         * Checks if an item exists in a given list
+         * @param  {[type]} item [description]
+         * @param  {[type]} list [description]
+         * @return {[type]}      [description]
+         */
+        function itemExists(item, list){
+          var found = false, len = list.length;
+          while(len--){
+            if(angular.equals(list[len], item)) found = true;
+          }
+          return found;
+        }
+        /**
+         * Removes an item from a list
          * @param  {[type]} owner Name of property owner
          * @return {[type]}       [description]
          */
-        function remove(owner){
-          var len = vm.ownerList.length;
+        function remove(item, list){
+          var len = list.length;
           while(len--){
-            if(vm.ownerList[len] === owner) {
-              removed = vm.ownerList.splice(len, 1);
+            if(list[len] === item) {
+              removed = list.splice(len, 1);
             }
           }
+          return removed;
         }
         /**
          * Determines if a owner already exists in the list
@@ -107,8 +163,15 @@
          * @return {[type]} [description]
          */
         function showControls(){
-           if(vm.file.receipt === "yes") vm.hideControls = true;
-           else vm.hideControls = false;
+           if(vm.receipt.seen === "yes") {
+             vm.hideControls = true;
+             vm.enableAppend = false;
+           }else{
+             vm.hideControls = false;
+             vm.enableAppend = true;
+           }
+
+
         }
         /**
          * Dismisses success or failure message

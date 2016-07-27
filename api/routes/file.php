@@ -40,7 +40,7 @@ function createFile($file){
                           ":remark" => $file.remarks, //checked
                           ":createdBy" => $file.createdBy, //checked
                           ":created"=> $file.created));
-    $act_id = $db->lastInsertId();
+    $acc_id = $db->lastInsertId();
     $stmt->closeCursor();
 
     $sql_create_owner = 'INSERT INTO owners (first_name, last_name, volume, folio, act_id)
@@ -50,7 +50,7 @@ function createFile($file){
                           ":last_name" => $file->last_name,
                           ":volume" => $file->volume,
                           ":folio" => $file->folio,
-                          ":act_id" => $act_id));
+                          ":acc_id" => $acc_id));
     $owner_id = $db->lastInsertId();
     $stmt->closeCursor();
 
@@ -60,33 +60,32 @@ function createFile($file){
     $stmt->execute(array(":seen" => $file->receipt,
                           ":currency_id" => $file->currency_id,
                           ":amount" => $file->amount,
-                          ":act_id" => $act_id));
+                          ":acc_id" => $acc_id));
     $receipt_id = $db->lastInsertId();
     $stmt->closeCursor();
 
     $sql_create_document = 'INSERT INTO documents
-                            ( act_id, comp_agreement, sale_agreement, cot,
-                              lease_agreement, map, property_tax, drawing,
-                              surveyor_id, surveyor_report)
-                           VALUES ( :act_id, :comp_agreement, :sale_agreement, :cot,
-                             :lease_agreement, :map, :property_tax, :drawing,
-                             :surveyor_id, :surveyor_report)';
+                            ( acc_id, comp_agreement, sale_agreement, cot,
+                              lease_agreement, map, property_tax,
+                              surveyor_drawing, surveyor_report)
+                           VALUES ( :acc_id, :comp_agreement, :sale_agreement, :cot,
+                             :lease_agreement, :map, :property_tax, :surveyor_drawing,
+                             :surveyor_report)';
     $stmt = $db->prepare($sql_create_document);
-    $stmt->execute(array(":act_id" => $act_id,
+    $stmt->execute(array(":acc_id" => $acc_id,
                           ":comp_agreement" => $file->comp_agreement,
                           ":sale_agreement" => $file->sale_agreement,
                           ":cot" => $file->cot,
                           ":lease_agreement" => $file->lease_agreement,
                           ":map" => $file->map,
                           ":property_tax" => $file->property_tax,
-                          ":drawing" => $file->drawing,
-                          ":surveyor_id" => $file->surveyor_id,
+                          ":surveyor_drawing" => $file->surveyor_drawing,
                           ":surveyor_report" => $file->surveyor_report));
     $document_id = $db->lastInsertId();
 
     $sql_update_file = 'UPDATE files SET owner_id = :owner_id,
                         receipt_id = :receipt_id,
-                        document_id = :document_id WHERE act_id = :act_id';
+                        document_id = :document_id WHERE acc_id = :acc_id';
     $stmt = $db->prepare($sql_create_document);
     $stmt->execute(array(":owner_id" => $owner_id,
                           ":receipt_id" => $receipt_id,
@@ -94,11 +93,11 @@ function createFile($file){
     $stmt->closeCursor();
     $db->commit();
     closeDBConnection( $db );
-    $result = $act_id;
+    $result = $acc_id;
   }catch(PDOException $e){
     $db->rollBack();
     $result = '{"error":{"text":' .$e->getMessage(). '}}';
   }
-  return $act_id;
+  return $acc_id;
 }
 ?>
