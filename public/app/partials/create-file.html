@@ -2,7 +2,7 @@
   data-ng-if="vm.message">
   <button type="button" class="close" aria-label="Close"
   data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
-  <strong>File saved.</strong>
+  <strong>A new file with <strong>{{vm.acc_id}}</strong> was created.</strong>
 </div>
 
 <div class="alert alert-danger alert-dismissible" role="alert"
@@ -21,7 +21,7 @@
           <label>Data Entry Clerk</label>
           <select class="form-control"
           data-ng-model="vm.file.createdBy"
-          ng-options="user.name for user in vm.users">
+          ng-options="user.user_id as user.name for user in vm.users">
 
           </select>
         </div>
@@ -54,7 +54,7 @@
           <label>Parish</label>
           <select class="form-control capitalize"
                   data-ng-model="vm.file.parish"
-                  data-ng-options="parish.title for parish in vm.parishes">
+                  data-ng-options="parish.id as parish.title for parish in vm.parishes">
 
           </select>
         </div>
@@ -65,7 +65,8 @@
           <label>File Activity</label>
           <select class="form-control capitalize"
                   data-ng-model="vm.file.activity"
-                  ng-options="activity.title for activity in vm.activities">
+                  data-ng-options="activity.id as activity.title for activity in vm.activities"
+                  >
           </select>
         </div>
       </div>
@@ -176,7 +177,7 @@
       <label>Currency</label>
       <select class="form-control to-uppercase"
               data-ng-model="vm.receipt.currency"
-              data-ng-options="currency.iso_code for currency in vm.currencies">
+              data-ng-options="currency.id as currency.iso_code for currency in vm.currencies">
 
       </select>
     </div>

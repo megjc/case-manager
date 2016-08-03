@@ -7,6 +7,7 @@
 
     function Home(homeService){
         var vm = this;
+        vm.acc_id = 0;
         vm.file = {};
         vm.receipt = {
           currency : "jmd",
@@ -47,6 +48,7 @@
          */
         homeService.getSystemLists().then(function(lists){
           setLists(lists);
+          //console.log(lists)
         }).catch(function(error){
           vm.users = vm.activities = vm.parishes = vm.currencies = vm.receipt_types = [];
         });
@@ -57,13 +59,13 @@
          */
         function setLists(lists){
           vm.users = lists.users;
-          vm.file.createdBy = vm.users[0];
+          vm.file.createdBy = vm.users[0].user_id;
           vm.activities = lists.activities;
-          vm.file.activity = vm.activities[0];
+          vm.file.activity = vm.activities[0].id;
           vm.parishes = lists.parishes;
-          vm.file.parish = vm.parishes[0];
+          vm.file.parish = vm.parishes[0].id;
           vm.currencies = lists.currencies;
-          vm.file.currency = vm.currencies[0];
+          vm.receipt.currency = vm.currencies[0].id;
           vm.receipt_types = lists.receipt_types;
           vm.receipt.type = vm.receipt_types[0];
         }
@@ -193,6 +195,7 @@
           }else{
             vm.create_view = false;
             vm.file_view = true;
+            getFiles();
           }
         }
         /**
@@ -200,7 +203,9 @@
          * @return {[type]} [description]
          */
         function processForm(){
-          //add numeric validation for volume, folio, currency
+          /**
+           * TODO - add numeric validation for volume, folio, currency
+           */
           if(vm.file.end_date === null
             || vm.file.start_date === null
             || vm.file.title === ""){
@@ -211,13 +216,14 @@
           vm.message = true;
           vm.error_message = false;
           vm.file.owners = vm.ownerList;
+          vm.file.receipts = vm.receiptList;
           /**
            * [createFile description]
            * @param  {[type]} vm.file [description]
            * @return {[type]}         [description]
            */
            homeService.createFile(vm.file).then(function(response){
-            console.log(response);
+            vm.acc_id = response;
             vm.file = {};
             vm.file = homeService.setFormDefaults();
             vm.ownerList = [];
@@ -225,6 +231,17 @@
             vm.hideControls = false;
           }).catch(function(error){
             console.log('Error');
+          });
+        }
+        /**
+         * Retrieve all files for view
+         * @return {[type]} [description]
+         */
+        function getFiles(){
+          homeService.getFiles().then(function(files){
+            vm.files = files;
+          }).catch(function(error){
+            vm.files = [];
           });
         }
     }

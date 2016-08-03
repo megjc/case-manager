@@ -10,7 +10,8 @@
           createFile: createFile,
           setFormDefaults: setFormDefaults,
           getUsersByType: getUsersByType,
-          getSystemLists: getSystemLists
+          getSystemLists: getSystemLists,
+          getFiles: getFiles
       };
 
       return service;
@@ -38,7 +39,7 @@
         function handleError(error){ return error; }
       }
       /**
-       * Retrieve all file activity tyoes
+       * Retrieve all file activity types
        * @return {[type]} [description]
        */
       function getSystemLists(){
@@ -54,6 +55,17 @@
           receipt: "no"
         };
         return file;
+      }
+      /**
+       * Retrieves all files 
+       * @return {[type]} [description]
+       */
+      function getFiles(){
+        return $http.get('/api/v1/files')
+                    .then(handleSuccess)
+                    .catch(handleError);
+        function handleSuccess(response){ return response.data; }
+        function handleError(error){ return error; }
       }
     }
 })();

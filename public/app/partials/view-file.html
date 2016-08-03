@@ -1,29 +1,31 @@
 <h2>View Files</h2>
-<hr>
-<select class="form-control" data-ng-model="vm.selectedUser">
+<!-- <hr> -->
+<!-- <select class="form-control" data-ng-model="vm.selectedUser">
   <option value="" selected>Select User</option>
   <option value="1">Shelly McFarlane</option>
-</select>
+</select> -->
 <hr>
 <table class="table table-hover">
       <thead>
         <tr>
+          <th>#</th>
           <th>File#</th>
-          <th>Property</th>
-          <th>Property Owner</th>
+          <th>Owner</th>
           <th>Volume#</th>
           <th>Folio#</th>
           <th>Parish</th>
+          <th>Entered by</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>311235</td>
-          <td>Scotts Hall</td>
-          <td>Ethel Taylor</td>
-          <td>1157</td>
-          <td>241</td>
-          <td>Saint Mary</td>
+        <tr data-ng-repeat="file in vm.files">
+          <td>{{file.acc_id}}</td>
+          <td>{{file.file_id}}</td>
+          <td>{{file.owner_id}}</td>
+          <td>{{file.volume}}</td>
+          <td>{{file.folio}}</td>
+          <td>{{file.parish}}</td>
+          <td>{{file.user_first_name}} {{file.user_last_name}}</td>
         </tr>
       </tbody>
     </table>
