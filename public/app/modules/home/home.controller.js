@@ -3,9 +3,9 @@
     .module('home')
     .controller('Home', Home);
 
-    Home.$inject = ['homeService'];
+    Home.$inject = ['homeService', '$window'];
 
-    function Home(homeService){
+    function Home(homeService, $window){
         var vm = this;
         vm.acc_id = 0;
         vm.file = {};
@@ -46,12 +46,16 @@
          * Get lists of entities to be used by the form.
          * @return {[type]} [description]
          */
-        homeService.getSystemLists().then(function(lists){
-          setLists(lists);
-          //console.log(lists)
-        }).catch(function(error){
-          vm.users = vm.activities = vm.parishes = vm.currencies = vm.receipt_types = [];
-        });
+        function getLists(){
+          homeService.getSystemLists().then(function(lists){
+            setLists(lists);
+          }).catch(function(error){
+            vm.users = vm.activities = vm.parishes = vm.currencies = vm.receipt_types = [];
+          });
+        }
+
+        getLists();
+
         /**
          * Sets select lists for the form.
          * @param {[type]} lists
@@ -61,7 +65,7 @@
           vm.users = lists.users;
           vm.file.createdBy = vm.users[0].user_id;
           vm.activities = lists.activities;
-          vm.file.activity = vm.activities[0].id;
+          vm.file.activity = vm.activities[1].id;
           vm.parishes = lists.parishes;
           vm.file.parish = vm.parishes[0].id;
           vm.currencies = lists.currencies;
@@ -230,6 +234,9 @@
           if(vm.file.lease_agreement === undefined)
               vm.file.lease_agreement = 0;
 
+          if(vm.file.comp_agreement === undefined)
+              vm.file.comp_agreement = 0;
+
           if(vm.file.cot === undefined) vm.file.cot = 0;
           if(vm.file.map === undefined) vm.file.map = 0;
           if(vm.file.sale_agreement === undefined)
@@ -241,10 +248,11 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
-          //console.log(typeof vm.file.cot);
+          //console.log(vm.file);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
             resetForm();
+            $window.scrollTo(0,0);
           }).catch(function(error){
             console.log('Error');
           });
@@ -270,6 +278,7 @@
           vm.receiptList = [];
           vm.message = true;
           vm.hideControls = false;
+          getLists();
         }
     }
 })();
