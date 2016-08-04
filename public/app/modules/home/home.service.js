@@ -57,7 +57,7 @@
         return file;
       }
       /**
-       * Retrieves all files 
+       * Retrieves all files
        * @return {[type]} [description]
        */
       function getFiles(){
@@ -66,6 +66,16 @@
                     .catch(handleError);
         function handleSuccess(response){ return response.data; }
         function handleError(error){ return error; }
+      }
+      /**
+       * Sets optional fields in file object
+       * @param {[type]} file [description]
+       */
+      function setOptionalValues(file){
+        if(file.file_id === "") file.file_id = "none seen";
+        if(file.property_title === "") file.property_title = "none seen";
+        if(file.remarks === "") file.remarks = "none seen";
+        return file;
       }
     }
 })();

@@ -188,7 +188,7 @@
       <label>Receipt Type</label>
       <select class="form-control capitalize"
               data-ng-model="vm.receipt.type"
-              data-ng-options="receipt.title for receipt in vm.receipt_types">
+              data-ng-options="receipt_type.id as receipt_type.title for receipt_type in vm.receipt_types">
 
       </select>
     </div>
@@ -237,7 +237,7 @@
 
     <div class="checkbox">
       <label>
-        <input type="checkbox" data-ng-model="vm.file.damage_compensation">
+        <input type="checkbox" data-ng-model="vm.file.comp_agreement">
         Agreement for Compensation for damage
       </label>
     </div>
@@ -270,29 +270,15 @@
 
     <div class="checkbox">
       <label>
-        <input type="checkbox" data-ng-model="vm.file.property_tax">
-        Property Tax Receipt
+        <input type="checkbox"
+               data-ng-model="vm.file.surveyor_drawing"> Surveyor's Drawing
       </label>
     </div>
 
     <div class="checkbox">
       <label>
         <input type="checkbox"
-               data-ng-model="vm.file.survey_drawing"> Surveyor's Drawing
-      </label>
-    </div>
-
-    <!-- <div class="checkbox">
-      <label>
-        <input type="checkbox"
-               data-ng-model="vm.file.survey_id"> Surveyor's ID
-      </label>
-    </div> -->
-
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"
-               data-ng-model="vm.file.survey_report"> Surveyor's Report
+               data-ng-model="vm.file.surveyor_report"> Surveyor's Report
       </label>
     </div>
 

@@ -217,18 +217,34 @@
           vm.error_message = false;
           vm.file.owners = vm.ownerList;
           vm.file.receipts = vm.receiptList;
-          /**
-           * [createFile description]
-           * @param  {[type]} vm.file [description]
-           * @return {[type]}         [description]
-           */
+
+          if( vm.file.property_title === undefined
+                || vm.file.property_title === "") vm.file.property_title = "none seen";
+
+          if(vm.file.remarks === undefined || vm.file.remarks === "")
+              vm.file.remarks = "none seen";
+
+          if(vm.file.file_id === "" || vm.file.file_id === undefined)
+              vm.file.file_id = "none seen";
+
+          if(vm.file.lease_agreement === undefined)
+              vm.file.lease_agreement = 0;
+
+          if(vm.file.cot === undefined) vm.file.cot = 0;
+          if(vm.file.map === undefined) vm.file.map = 0;
+          if(vm.file.sale_agreement === undefined)
+             vm.file.sale_agreement = 0;
+
+          if(vm.file.surveyor_drawing === undefined)
+             vm.file.surveyor_drawing = 0;
+
+          if(vm.file.surveyor_report === undefined)
+            vm.file.surveyor_report = 0;
+
+          //console.log(typeof vm.file.cot);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
-            vm.file = {};
-            vm.file = homeService.setFormDefaults();
-            vm.ownerList = [];
-            vm.message = true;
-            vm.hideControls = false;
+            resetForm();
           }).catch(function(error){
             console.log('Error');
           });
@@ -243,6 +259,17 @@
           }).catch(function(error){
             vm.files = [];
           });
+        }
+        /**
+         * Resets form
+         */
+        function resetForm(){
+          vm.file = {};
+          vm.file = homeService.setFormDefaults();
+          vm.ownerList = [];
+          vm.receiptList = [];
+          vm.message = true;
+          vm.hideControls = false;
         }
     }
 })();
