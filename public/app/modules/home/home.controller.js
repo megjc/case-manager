@@ -229,6 +229,9 @@
 
           if(vm.file.lease_agreement === undefined)
               vm.file.lease_agreement = 0;
+              
+          if(vm.file.comp_agreement === undefined)
+              vm.file.comp_agreement = 0;
 
           if(vm.file.cot === undefined) vm.file.cot = 0;
           if(vm.file.map === undefined) vm.file.map = 0;
@@ -241,7 +244,6 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
-          //console.log(typeof vm.file.cot);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
             resetForm();

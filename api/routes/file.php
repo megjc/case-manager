@@ -51,26 +51,25 @@ function createFile($file){
                           ":end_date" => $end_date,//checked
                           ":parish" => $file->parish, //checked
                           ":act_type_id" => $file->activity, //checked
-                          ":title" => $file->title, //checked
-                          ":property_title" => $file->property_title,
-                          ":remarks" => $file->remarks, //checked
+                          ":title" => strtolower($file->title), //checked
+                          ":property_title" => strtolower($file->property_title),
+                          ":remarks" => strtolower($file->remarks), //checked
                           ":createdBy" => $file->createdBy //checked
                           ));
     $acc_id = $db->lastInsertId();
     $stmt->closeCursor();
 
-    $sql_create_owner = 'INSERT INTO owners (first_name, last_name, volume, folio, acc_id)
-                         VALUES (:first_name, :last_name, :volume, :folio, :acc_id)';
+    $sql_create_owner = 'INSERT INTO owners (name, volume, folio, acc_id)
+                         VALUES (:name, :volume, :folio, :acc_id)';
     $stmt = $db->prepare($sql_create_owner);
 
     $len = count($file->owners);
     while($len--){
-      $name = explode(" ", $file->owners[$len]->name);
-      $stmt->execute(array(":first_name" => $name[0],
-                              ":last_name" => $name[1],
-                              ":volume" => $file->owners[$len]->volume,
-                              ":folio" => $file->owners[$len]->folio,
-                              ":acc_id" => $acc_id));
+      // $name = explode(" ", $file->owners[$len]->name);
+      $stmt->execute(array(":name" => strtolower($file->owners[$len]->name),
+                            ":volume" => intval($file->owners[$len]->volume),
+                            ":folio" => intval($file->owners[$len]->folio),
+                            ":acc_id" => $acc_id));
     }
     // $owner_id = $db->lastInsertId();
     $stmt->closeCursor();
@@ -98,13 +97,13 @@ function createFile($file){
                              :surveyor_report)';
     $stmt = $db->prepare($sql_create_document);
     $stmt->execute(array(":acc_id" => $acc_id,
-                          ":comp_agreement" => $file->comp_agreement,
-                          ":sale_agreement" => $file->sale_agreement,
-                          ":cot" => $file->cot,
-                          ":lease_agreement" => $file->lease_agreement,
-                          ":map" => $file->map,
-                          ":surveyor_drawing" => $file->surveyor_drawing,
-                          ":surveyor_report" => $file->surveyor_report));
+                          ":comp_agreement" => intval($file->comp_agreement),
+                          ":sale_agreement" => intval($file->sale_agreement),
+                          ":cot" => intval($file->cot),
+                          ":lease_agreement" => intval($file->lease_agreement),
+                          ":map" => intval($file->map),
+                          ":surveyor_drawing" => intval($file->surveyor_drawing),
+                          ":surveyor_report" => intval($file->surveyor_report)));
     $stmt->closeCursor();
     $db->commit();
     closeDBConnection( $db );
@@ -120,11 +119,18 @@ function createFile($file){
  * @return [type] [description]
  */
 function getFiles(){
-  $sql = "SELECT f.acc_id, f.file_id, p.title as parish,
-          u.first_name as user_first_name, u.last_name as user_last_name
+  $sql = "SELECT u.first_name as user_first_name,
+                 u.last_name as user_last_name,
+                 p.title as parish,
+                 f.acc_id,
+                 f.file_id,
+                 o.volume,
+                 o.folio,
+                 o.name as owner_name
           FROM files as f
-          INNER JOIN users as u ON f.createdBy = u.id
-          INNER JOIN parishes as p ON f.parish = p.id";
+          LEFT JOIN parishes as p ON f.parish = p.id
+          LEFT JOIN owners as o ON f.acc_id = o.acc_id
+          LEFT JOIN users as u ON f.createdBy = u.id";
   try{
     $db = openDBConnection();
     $stmt = $db->prepare( $sql );
