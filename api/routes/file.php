@@ -46,14 +46,14 @@ function createFile($file){
                                 :property_title, :remarks,
                                 :createdBy, NOW())';
     $stmt = $db->prepare($sql_create_file);
-    $stmt->execute(array(":file_id" => $file->file_id, //checked
+    $stmt->execute(array(":file_id" => trim($file->file_id), //checked
                           ":start_date" => $start_date,
                           ":end_date" => $end_date,//checked
                           ":parish" => $file->parish, //checked
                           ":act_type_id" => $file->activity, //checked
-                          ":title" => strtolower($file->title), //checked
-                          ":property_title" => strtolower($file->property_title),
-                          ":remarks" => strtolower($file->remarks), //checked
+                          ":title" => trim(strtolower($file->title)), //checked
+                          ":property_title" => trim(strtolower($file->property_title)),
+                          ":remarks" => trim(strtolower($file->remarks)), //checked
                           ":createdBy" => $file->createdBy //checked
                           ));
     $acc_id = $db->lastInsertId();
@@ -66,7 +66,7 @@ function createFile($file){
     $len = count($file->owners);
     while($len--){
       // $name = explode(" ", $file->owners[$len]->name);
-      $stmt->execute(array(":name" => strtolower($file->owners[$len]->name),
+      $stmt->execute(array(":name" => trim(strtolower($file->owners[$len]->name)),
                             ":volume" => intval($file->owners[$len]->volume),
                             ":folio" => intval($file->owners[$len]->folio),
                             ":acc_id" => $acc_id));

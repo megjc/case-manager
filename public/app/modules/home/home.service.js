@@ -52,7 +52,8 @@
 
       function setFormDefaults(){
         var file = {
-          receipt: "no"
+          receipt: "no",
+          activity : 2
         };
         return file;
       }
