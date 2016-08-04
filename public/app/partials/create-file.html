@@ -1,40 +1,61 @@
-<div class="alert alert-success alert-dismissible" role="alert" data-ng-if="vm.message">
-  <button type="button" class="close" aria-label="Close" data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
-  <strong>File saved.</strong>
+<div class="alert alert-success alert-dismissible" role="alert"
+  data-ng-if="vm.message">
+  <button type="button" class="close" aria-label="Close"
+  data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+  <strong>A new file with <strong>{{vm.acc_id}}</strong> was created.</strong>
 </div>
+
+<div class="alert alert-danger alert-dismissible" role="alert"
+  data-ng-if="vm.error_message">
+  <button type="button" class="close" aria-label="Close"
+  data-ng-click="vm.dismiss()"><span aria-hidden="true">&times;</span></button>
+  <strong>Form not valid. Please review form before submitting.</strong>
+</div>
+
 <h2>Create File</h2>
 <hr>
-  <form>
+  <form data-ng-submit="vm.processForm()">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <label>Data Entry Clerk</label>
-          <select class="form-control">
-            <option>Shelly-Ann McFarlane</option>
+          <select class="form-control"
+          data-ng-model="vm.file.createdBy"
+          ng-options="user.user_id as user.name for user in vm.users">
+
           </select>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label>File End Date</label>
-          <input type="date" class="form-control">
+          <label>File End Date - <span class="optional-text">Optional</span>
+          </label>
+          <input type="date"
+                class="form-control"
+                data-ng-model="vm.file.end_date">
         </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-4">
-        <label>File Number</label>
+        <label>File Number - <span class="optional-text">Optional</span></label>
         <div class="form-group">
-            <input type="text" placeholder="File Number" class="form-control">
+            <input type="text"
+                   placeholder="File Number"
+                   maxlength="10"
+                   class="form-control"
+                   data-ng-model="vm.file.file_id">
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="form-group">
           <label>Parish</label>
-          <select class="form-control">
-            <option>Parish</option>
+          <select class="form-control capitalize"
+                  data-ng-model="vm.file.parish"
+                  data-ng-options="parish.id as parish.title for parish in vm.parishes">
+
           </select>
         </div>
       </div>
@@ -42,8 +63,10 @@
       <div class="col-md-4">
         <div class="form-group">
           <label>File Activity</label>
-          <select class="form-control">
-            <option>Inactive</option>
+          <select class="form-control capitalize"
+                  data-ng-model="vm.file.activity"
+                  data-ng-options="activity.id as activity.title for activity in vm.activities"
+                  >
           </select>
         </div>
       </div>
@@ -53,7 +76,12 @@
         <div class="col-md-12">
         <div class="form-group">
           <label>File Title</label>
-          <input type="text" placeholder="File Title" class="form-control">
+          <textarea
+           class="form-control"
+           data-ng-model="vm.file.title"
+           placeholder="File Title">
+
+          </textarea>
         </div>
       </div>
     </div>
@@ -61,23 +89,56 @@
     <div class="row">
       <div class="col-md-12">
       <div class="form-group">
-        <label>Property</label>
-        <textarea placeholder="Property" class="form-control"></textarea>
+        <label>Property Title - <span class="optional-text">Optional</span>
+        </label>
+        <input type="text"
+               placeholder="Property Title"
+               class="form-control"
+               data-ng-model="vm.file.property_title">
       </div>
     </div>
   </div>
 
-  <h4>Add Property Owner(s)</h4>
+  <!-- <h4>Add Property Owner(s)</h4> -->
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
       <div class="form-group">
-
-        <input type="text" placeholder="Name" data-ng-model="vm.owner"class="form-control">
+        <label>Property Owner - <span class="optional-text">Optional</span>
+        </label>
+        <input type="text" placeholder="Name"
+              data-ng-model="vm.owner.name"
+              class="form-control">
       </div>
     </div>
-    <div class="col-md-6">
-      <button class="btn btn-success" data-ng-click="vm.addOwner()">Add</button>
+
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Volume Number - <span class="optional-text">Optional</span>
+        </label>
+        <input type="text"
+               placeholder="Volume Number"
+               maxlength="4"
+               class="form-control"
+               data-ng-model="vm.owner.volume">
+      </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="form-group">
+      <label>Folio Number - <span class="optional-text">Optional</span></label>
+      <input type="text"
+             placeholder="Folio Number"
+             class="form-control"
+             maxlength="4"
+             data-ng-model="vm.owner.folio">
     </div>
+  </div>
+
+    <div class="col-md-2">
+      <a href class="btn btn-success" style="margin-top: 25px;"
+      data-ng-click="vm.append(vm.owner, vm.ownerList, 'owner')">Add</a>
+    </div>
+
   </div>
 
   <div class="well" data-ng-show="vm.ownerList.length > 0">
@@ -85,75 +146,50 @@
       <thead>
         <th>#</th>
         <th>Owner(s)</th>
-        <th></th>
+        <th>Volume#</th>
+        <th>Folio#</th>
       </thead>
       <tr data-ng-repeat="owner in vm.ownerList">
         <td>{{$index+1}}</td>
-        <td>{{owner}}</td>
-        <td><a href data-ng-click="vm.removeOwner(owner)">Remove</a></td>
+        <td>{{owner.name}}</td>
+        <td>{{owner.volume}}</td>
+        <td>{{owner.folio}}</td>
+        <td><a href data-ng-click="vm.remove(owner, vm.ownerList)">Remove</a>
+        </td>
       </tr>
     </table>
   </div>
-  <hr>
-  <div class="row">
-      <div class="col-md-3">
-        <div class="form-group">
-          <label>Volume Number</label>
-          <input type="text"
-                 placeholder="Volume Number"
-                 class="form-control"
-                 data-ng-model="vm.file.volume">
-        </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="form-group">
-        <label>Folio Number</label>
-        <input type="text"
-               placeholder="Folio Number"
-               class="form-control"
-               data-ng-model="vm.file.folio">
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <button class="btn btn-success" data-ng-click="vm.addPair()">Add</button>
-    </div>
-</div>
-
-<div class="well">
-  <table class="table table-striped">
-    <thead>
-      <th>Volume Number</th>
-      <th>Folio Number</th>
-      <th></th>
-    </thead>
-    <tr data-ng-repeat="pair in vm.volumeAndFolioList">
-      <td>{{pair.volume}}</td>
-      <td>{{pair.folio}}</td>
-      <td><a href data-ng-click="vm.removePair(pair)">Remove</a></td>
-    </tr>
-  </table>
-</div>
-
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="form-group">
       <label>Receipt Seen</label>
-      <select class="form-control" data-ng-model="vm.file.receipt" data-ng-change="vm.showControls()">
+      <select class="form-control" data-ng-model="vm.receipt.seen"
+        data-ng-change="vm.showControls()">
         <option value="no">No</option>
         <option value="yes">Yes</option>
       </select>
     </div>
   </div>
 
-  <div class="col-md-3" data-ng-show="vm.hideControls">
+  <div class="col-md-2" data-ng-show="vm.hideControls">
     <div class="form-group">
       <label>Currency</label>
-      <select class="form-control">
-        <option>JMD</option>
-        <option>GBP</option>
+      <select class="form-control to-uppercase"
+              data-ng-model="vm.receipt.currency"
+              data-ng-options="currency.id as currency.iso_code for currency in vm.currencies">
+
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3" data-ng-show="vm.hideControls">
+    <div class="form-group">
+      <label>Receipt Type</label>
+      <select class="form-control capitalize"
+              data-ng-model="vm.receipt.type"
+              data-ng-options="receipt_type.id as receipt_type.title for receipt_type in vm.receipt_types">
+
       </select>
     </div>
   </div>
@@ -162,83 +198,109 @@
     <label>Payment Amount</label>
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" placeholder="Payment Amount" class="form-control">
+      <input type="text" placeholder="Amt" class="form-control"
+            data-ng-model="vm.receipt.amount">
       <span class="input-group-addon">.00</span>
     </div>
   </div>
+
+  <div class="col-md-2" data-ng-show="vm.hideControls">
+    <a href class="btn btn-success" style="margin-top: 25px;"
+      data-ng-disabled="vm.enableAppend"
+      data-ng-click="vm.append(vm.receipt, vm.receiptList, 'receipt')">Add</a>
+  </div>
+
 </div>
 
-<hr>
+<div class="well" data-ng-show="vm.receiptList.length > 0">
+  <table class="table table-striped">
+    <thead>
+      <th>#</th>
+      <th>Type</th>
+      <th>Currency</th>
+      <th>Amount</th>
+    </thead>
+    <tr data-ng-repeat="receipt in vm.receiptList">
+      <td>{{$index+1}}</td>
+      <td>{{receipt.type.title}}</td>
+      <td>{{receipt.currency.iso_code}}</td>
+      <td>{{receipt.amount}}</td>
+      <td><a href data-ng-click="vm.remove(receipt, vm.receiptList)">Remove</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
 <h4>Documents Found</h4>
 <div class="row">
   <div class="col-md-12">
+
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Agreements of Sale
+        <input type="checkbox" data-ng-model="vm.file.comp_agreement">
+        Agreement for Compensation for damage
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Surveyor's ID
+        <input type="checkbox"
+        data-ng-model="vm.file.sale_agreement"> Agreements of Sale
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Surveyor's Report
+        <input type="checkbox" data-ng-model="vm.file.cot"> Certificate of Title
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Surveyor's Drawing
+        <input type="checkbox" data-ng-model="vm.file.lease_agreement">
+         Lease Agreement
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Certificate of Title
+        <input type="checkbox" data-ng-model="vm.file.map"> Map
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Map Enclosed
+        <input type="checkbox"
+               data-ng-model="vm.file.surveyor_drawing"> Surveyor's Drawing
       </label>
     </div>
 
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Property Tax Receipt
+        <input type="checkbox"
+               data-ng-model="vm.file.surveyor_report"> Surveyor's Report
       </label>
     </div>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Lease Agreement
-      </label>
-    </div>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Agreement for Compensation for damage
-      </label>
-    </div>
+
     <hr>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>File Start Date</label>
-            <input type="date" class="form-control">
+            <label>File Start Date - <span class="optional-text">Optional</span>
+            </label>
+            <input type="date" class="form-control"
+            data-ng-model="vm.file.start_date">
           </div>
         </div>
         <div class="col-md-6"></div>
       </div>
 
       <div class="form-group">
-        <label>Remarks</label>
-        <textarea placeholder="Enter your remarks" class="form-control"></textarea>
+        <label>Remarks - <span class="optional-text">Optional</span></label>
+        <textarea placeholder="Enter your remarks" class="form-control"
+          data-ng-model="vm.file.remarks"></textarea>
       </div>
 
       <button class="btn btn-success pull-right space-left">Submit</button>

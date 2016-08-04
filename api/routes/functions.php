@@ -9,7 +9,8 @@ $dotenv->load();
 function openDBConnection(){
     $user = getenv('DB_USER');
     $pass = getenv('DB_PASS');
-    $pdo = new PDO('mysql:host='.getenv('DB_HOST').';port=3306;dbname='.getenv('DB_NAME'), $user, $pass);
+    $host = getenv('DB_HOST');
+    $pdo = new PDO('mysql:host='.$host.';port=3306;dbname=case_manager', $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
 }

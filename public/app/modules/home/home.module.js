@@ -9,10 +9,6 @@
          controller: 'Home',
          controllerAs: 'vm',
          templateUrl: 'public/app/modules/home/home.html'
-      }).when('/view-files',{
-        controller: 'Home',
-        controllerAs: 'vm',
-        templateUrl: 'public/app/modules/home/files.html'
       });
    }
 })();
