@@ -12,7 +12,7 @@ $app->group('/v1', function() use ($app){
     $app->group('/files', function() use($app){
         routeFileRequests($app);
     });
-    
+
     $app->group('/users', function() use($app){
         routeUserRequests($app);
     });

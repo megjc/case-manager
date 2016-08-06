@@ -1,5 +1,5 @@
 <?php
-include_once 'functions.php';
+include_once '../api/lib/functions.php';
 /**
  * Catch all function handling all file related api requests
  * @param  [type] $app [description]
