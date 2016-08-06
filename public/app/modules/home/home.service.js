@@ -21,6 +21,7 @@
        * @return {[type]}      [description]
        */
       function createFile(file){
+
         return $http.post('/api/v1/files', file)
                     .then(handleSuccess)
                     .catch(handleError);
@@ -52,8 +53,7 @@
 
       function setFormDefaults(){
         var file = {
-          receipt: "no",
-          activity : 2
+          receipt: "no"
         };
         return file;
       }
