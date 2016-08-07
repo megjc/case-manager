@@ -9,7 +9,6 @@ function routeFileRequests($app){
 
   $app->post('/', function() use($app){
       $new_file = json_decode($app->request->getBody());
-      //test($new_file);
       $response = createFile($new_file);
       setResponseHeader($app);
       echo json_encode($response);
@@ -17,6 +16,12 @@ function routeFileRequests($app){
 
   $app->get('/', function() use($app){
       $response = getFiles();
+      setResponseHeader($app);
+      echo json_encode($response);
+  });
+
+  $app->get('/:id', function($id) use($app){
+      $response = getFileById($id);
       setResponseHeader($app);
       echo json_encode($response);
   });
@@ -141,5 +146,32 @@ function getFiles(){
     $result = '{"error":{"text":' .$e->getMessage(). '}}';
   }
   return $result;
+}
+
+function getFileById($id){
+  $sql = "SELECT u.first_name as user_first_name,
+                 u.last_name as user_last_name,
+                 p.title as parish,
+                 f.acc_id,
+                 f.file_id,
+                 o.volume,
+                 o.folio,
+                 o.name as owner_name
+          FROM files as f
+          LEFT JOIN parishes as p ON f.parish = p.id
+          LEFT JOIN owners as o ON f.acc_id = o.acc_id
+          LEFT JOIN users as u ON f.createdBy = u.id
+          WHERE f.acc_id = :id";
+    try{
+      $db = openDBConnection();
+      $stmt = $db->prepare( $sql );
+      $stmt->bindValue("id", $id);
+      $stmt->execute();
+      $result = $stmt->fetch();
+      closeDBConnection( $db );
+    }catch(PDOException $e){
+      $result = '{"error":{"text":' .$e->getMessage(). '}}';
+    }
+    return $result;
 }
 ?>

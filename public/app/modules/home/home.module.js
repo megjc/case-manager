@@ -9,6 +9,10 @@
          controller: 'Home',
          controllerAs: 'vm',
          templateUrl: 'public/app/modules/home/home.html'
+      }).when('/files/:id', {
+        controller: 'Home',
+        controllerAs: 'vm',
+        templateUrl: 'public/app/modules/home/file.html'
       });
    }
 })();

@@ -3,9 +3,9 @@
     .module('home')
     .controller('Home', Home);
 
-    Home.$inject = ['homeService', '$window'];
+    Home.$inject = ['homeService', '$window', '$location'];
 
-    function Home(homeService, $window){
+    function Home(homeService, $window, $location){
         var vm = this;
         vm.acc_id = 0;
         vm.file = {};
@@ -36,10 +36,11 @@
         vm.show = show;
         vm.remove = remove;
         vm.processForm = processForm;
-        // vm.add = add;
         vm.append = append;
         vm.showControls = showControls;
         vm.dismiss = dismiss;
+        vm.showDetail = showDetail;
+        vm.resetForm = resetForm;
         vm.file = homeService.setFormDefaults();
 
         /**
@@ -245,6 +246,16 @@
           vm.message = true;
           vm.hideControls = false;
           getLists();
+        }
+
+        function showDetail(id){
+          homeService.getFileById(id).then(function(file){
+            vm.file = file;
+            $location.path('/files/'+ id);
+            console.log(file);
+          }).catch(function(error){
+            vm.file = [];
+          })
         }
     }
 })();

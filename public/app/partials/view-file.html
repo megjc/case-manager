@@ -1,11 +1,10 @@
 <h2>View Files</h2>
-<!-- <hr> -->
-<!-- <select class="form-control" data-ng-model="vm.selectedUser">
-  <option value="" selected>Select User</option>
-  <option value="1">Shelly McFarlane</option>
-</select> -->
 <hr>
-<table class="table table-hover">
+<p data-ng-show="vm.files.length < 1">
+  There are <strong>{{vm.files.length}}</strong> files.
+</p>
+
+<table class="table table-hover capitalize" data-ng-show="vm.files.length > 0">
       <thead>
         <tr>
           <th>#</th>
@@ -18,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-ng-repeat="file in vm.files">
+        <tr data-ng-repeat="file in vm.files" data-ng-click="vm.showDetail(file.acc_id)">
           <td>{{file.acc_id}}</td>
           <td>{{file.file_id}}</td>
           <td>{{file.owner_name}}</td>

@@ -319,7 +319,8 @@
 
       <button class="btn btn-success pull-right space-left"
               data-ng-disabled="createForm.$invalid">Submit</button>
-      <button class="btn btn-default pull-right">Cancel</button>
+      <button class="btn btn-default pull-right" data-ng-click="vm.resetForm()">
+        Cancel</button>
   </div>
 </div>
 </form>
