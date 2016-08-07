@@ -12,9 +12,14 @@
   <strong>Form not valid. Please review form before submitting.</strong>
 </div>
 
+<div class="alert alert-danger alert-dismissible" role="alert"
+  data-ng-if="showError">
+  <strong>We are experiencing a server error at this time.</strong>
+</div>
+
 <h2>Create File</h2>
 <hr>
-  <form data-ng-submit="vm.processForm()">
+  <form data-ng-submit="vm.processForm()" novalidate name="createForm">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -74,14 +79,23 @@
 
       <div class="row">
         <div class="col-md-12">
-        <div class="form-group">
+        <div class="form-group"
+          data-ng-class="{ 'has-error': createForm.title.$touched
+          && createForm.title.$invalid}">
           <label>File Title</label>
           <textarea
            class="form-control"
            data-ng-model="vm.file.title"
-           placeholder="File Title">
+           placeholder="File Title"
+           name="title"
+           required>
 
           </textarea>
+          <div class="help-block"
+              data-ng-messages="createForm.title.$error"
+              data-ng-if="createForm.title.$touched">
+              <p ng-message="required">The file title is required.</p>
+            </div>
         </div>
       </div>
     </div>
@@ -303,7 +317,8 @@
           data-ng-model="vm.file.remarks"></textarea>
       </div>
 
-      <button class="btn btn-success pull-right space-left">Submit</button>
+      <button class="btn btn-success pull-right space-left"
+              data-ng-disabled="createForm.$invalid">Submit</button>
       <button class="btn btn-default pull-right">Cancel</button>
   </div>
 </div>

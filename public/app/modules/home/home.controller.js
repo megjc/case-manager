@@ -36,7 +36,7 @@
         vm.show = show;
         vm.remove = remove;
         vm.processForm = processForm;
-        vm.add = add;
+        // vm.add = add;
         vm.append = append;
         vm.showControls = showControls;
         vm.dismiss = dismiss;
@@ -72,20 +72,6 @@
           vm.receipt.currency = vm.currencies[0].id;
           vm.receipt_types = lists.receipt_types;
           vm.receipt.type = vm.receipt_types[0];
-        }
-        /**
-         * Adds a property owner to a list
-         */
-        function add(){
-          var owner = {name: "not seen", volume: "not seen", folio: "not seen"};
-          if(typeof vm.owner.name !== 'undefined'){
-             if(vm.owner.name.length > 0)
-             owner = {name: vm.owner.name,
-                      volume: vm.owner.volume,
-                      folio: vm.owner.folio };
-          }
-          if(!ownerExists(owner)) vm.ownerList.push(owner);
-          vm.owner.name = vm.owner.volume = vm.owner.folio = "";
         }
         /**
          * Adds an item to a given list
@@ -148,23 +134,6 @@
           return removed;
         }
         /**
-         * Determines if a owner already exists in the list
-         * @param  {[type]} owner Name of owner
-         * @return {[type]}       [description]
-         */
-        function ownerExists(owner){
-          var found = false;
-          var len = vm.ownerList.length;
-          while(len--){
-            if(vm.ownerList[len].name === owner.name
-              && vm.ownerList[len].volume === owner.volume
-              && vm.ownerList[len].folio === owner.folio) {
-              found = true;
-            }
-          }
-          return found;
-        }
-        /**
          * Displays currency form controls
          * @return {[type]} [description]
          */
@@ -176,8 +145,6 @@
              vm.hideControls = false;
              vm.enableAppend = true;
            }
-
-
         }
         /**
          * Dismisses success or failure message
@@ -248,7 +215,6 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
-          //console.log(vm.file);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
             resetForm();

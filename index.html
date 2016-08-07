@@ -22,7 +22,15 @@
             <a class="navbar-brand" href="#/">Case Manager</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav">
+              <li><a href data-ng-click="vm.show('create-view')">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                Create File</a></li>
+              <li><a href data-ng-click="vm.show('file-view')">
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                View Files</a></li>
+              <li><a href> <i class="fa fa-search" aria-hidden="true"></i>
+                Search Files</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
     </div>
@@ -44,11 +52,14 @@
 </div> -->
 
 <script src="public/bower_components/angular/angular.js"></script>
-<script src="public/bower_components/angular-route/angular-route.js"></script>
+<script src="public/bower_components/angular-route/angular-route.min.js"></script>
+<script src="public/bower_components/angular-messages/angular-messages.min.js"></script>
 <script src="public/app/modules/app.module.js"></script>
+<script src="public/app/modules/services/services.js"></script>
 <script src="public/app/modules/home/home.module.js"></script>
 <script src="public/app/modules/home/home.controller.js"></script>
 <script src="public/app/modules/home/home.service.js"></script>
+
 <!-- inject:js -->
 <!-- endinject -->
 </body>
