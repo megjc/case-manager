@@ -1,0 +1,176 @@
+<div class="row">
+<div class="col-md-12">
+  <h2 class="capitalize">File Title - {{vm.file.title}}</h2>
+  <hr>
+  <div class="row">
+    <div class="col-md-1 labels">
+    Acc_ID
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        {{vm.file.acc_id}}
+      </div>
+    </div>
+
+    <div class="col-md-1 labels">
+    Start Date
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        02/02/2016
+        <!-- {{vm.file.start_date }} -->
+      </div>
+    </div>
+
+    <div class="col-md-1 labels">
+    End Date
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        02/02/2016
+        <!-- {{vm.file.end_date }} -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 labels">
+    File ID
+  </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        {{vm.file.file_id}}
+      </div>
+    </div>
+
+  <div class="col-md-1 labels">
+    Property
+  </div>
+    <div class="col-md-3">
+      <div class="well well-sm capitalize">
+        {{vm.file.property_title}}
+      </div>
+    </div>
+
+  <div class="col-md-1 labels">
+    Owner
+    </div>
+    <div class="col-md-3">
+    <div class="well well-sm capitalize">
+        {{vm.file.owner_name}}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 labels">
+    Volume
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        {{vm.file.volume}}
+      </div>
+    </div>
+
+    <div class="col-md-1 labels">
+    Folio
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+        {{vm.file.folio}}
+      </div>
+    </div>
+
+    <div class="col-md-1 labels">
+    Parish
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm capitalize">
+        {{vm.file.parish}}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 labels">
+      Amount
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm">
+      {{vm.file.amount}}
+      </div>
+    </div>
+    <div class="col-md-1 labels">
+      Currency
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm to-uppercase">
+      {{vm.file.currency}}
+      </div>
+    </div>
+    <div class="col-md-1 labels">
+      Type
+    </div>
+    <div class="col-md-3">
+      <div class="well well-sm capitalize">
+      {{vm.file.receipt_type}}
+      </div>
+    </div>
+
+  </div>
+<hr>
+  <div class="row">
+    <div class="col-md-1 labels">Compens. Agreement</div>
+    <div class="col-md-3">  <div class="well well-sm capitalize">
+      {{vm.file.compensation | convert}}
+      </div></div>
+      <div class="col-md-1 labels">Sale Agreement</div>
+      <div class="col-md-3">  <div class="well well-sm capitalize">
+        {{vm.file.sale_agreement | convert}}
+        </div></div>
+        <div class="col-md-1 labels">Certificate of Title</div>
+        <div class="col-md-3">  <div class="well well-sm capitalize">
+          {{vm.file.cot | convert}}
+          </div></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 labels">Lease Agreement</div>
+    <div class="col-md-3">  <div class="well well-sm capitalize">
+      {{vm.file.lease_agreement | convert}}
+      </div></div>
+      <div class="col-md-1 labels">Map</div>
+      <div class="col-md-3">  <div class="well well-sm capitalize">
+        {{vm.file.map | convert}}
+        </div></div>
+        <div class="col-md-1 labels">Surveyor's Drawing</div>
+        <div class="col-md-3">  <div class="well well-sm capitalize">
+          {{vm.file.drawing | convert}}
+          </div></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 labels">Surveyor's Report</div>
+    <div class="col-md-3"> <div class="well well-sm capitalize">
+      {{vm.file.report | convert}}
+      </div></div>
+      <div class="col-md-1 labels">File Activity</div>
+      <div class="col-md-3">  <div class="well well-sm capitalize">
+        {{vm.file.activity}}
+        </div></div>
+  </div>
+<hr>
+  <div class="row">
+    <div class="col-md-1 labels">
+      Remarks
+    </div>
+    <div class="col-md-11">
+      <div class="well well-sm capitalize">
+      {{vm.file.remarks}}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+</div>
+</div>

@@ -12,9 +12,14 @@
   <strong>Form not valid. Please review form before submitting.</strong>
 </div>
 
+<div class="alert alert-danger alert-dismissible" role="alert"
+  data-ng-if="showError">
+  <strong>We are experiencing a server error at this time.</strong>
+</div>
+
 <h2>Create File</h2>
 <hr>
-  <form data-ng-submit="vm.processForm()">
+  <form data-ng-submit="vm.processForm()" novalidate name="createForm">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -74,14 +79,23 @@
 
       <div class="row">
         <div class="col-md-12">
-        <div class="form-group">
+        <div class="form-group"
+          data-ng-class="{ 'has-error': createForm.title.$touched
+          && createForm.title.$invalid}">
           <label>File Title</label>
           <textarea
            class="form-control"
            data-ng-model="vm.file.title"
-           placeholder="File Title">
+           placeholder="File Title"
+           name="title"
+           required>
 
           </textarea>
+          <div class="help-block"
+              data-ng-messages="createForm.title.$error"
+              data-ng-if="createForm.title.$touched">
+              <p ng-message="required">The file title is required.</p>
+            </div>
         </div>
       </div>
     </div>
@@ -142,7 +156,7 @@
   </div>
 
   <div class="well" data-ng-show="vm.ownerList.length > 0">
-    <table class="table table-striped">
+    <table class="table table-striped capitalize">
       <thead>
         <th>#</th>
         <th>Owner(s)</th>
@@ -177,7 +191,7 @@
       <label>Currency</label>
       <select class="form-control to-uppercase"
               data-ng-model="vm.receipt.currency"
-              data-ng-options="currency.id as currency.iso_code for currency in vm.currencies">
+              data-ng-options="currency.iso_code for currency in vm.currencies">
 
       </select>
     </div>
@@ -188,7 +202,7 @@
       <label>Receipt Type</label>
       <select class="form-control capitalize"
               data-ng-model="vm.receipt.type"
-              data-ng-options="receipt_type.id as receipt_type.title for receipt_type in vm.receipt_types">
+              data-ng-options="receipt_type.title for receipt_type in vm.receipt_types">
 
       </select>
     </div>
@@ -198,7 +212,7 @@
     <label>Payment Amount</label>
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" placeholder="Amt" class="form-control"
+      <input type="text" placeholder="Amount" class="form-control"
             data-ng-model="vm.receipt.amount">
       <span class="input-group-addon">.00</span>
     </div>
@@ -213,7 +227,7 @@
 </div>
 
 <div class="well" data-ng-show="vm.receiptList.length > 0">
-  <table class="table table-striped">
+  <table class="table table-striped capitalize" >
     <thead>
       <th>#</th>
       <th>Type</th>
@@ -223,7 +237,7 @@
     <tr data-ng-repeat="receipt in vm.receiptList">
       <td>{{$index+1}}</td>
       <td>{{receipt.type.title}}</td>
-      <td>{{receipt.currency.iso_code}}</td>
+      <td class="to-uppercase">{{receipt.currency.iso_code}}</td>
       <td>{{receipt.amount}}</td>
       <td><a href data-ng-click="vm.remove(receipt, vm.receiptList)">Remove</a>
       </td>
@@ -281,9 +295,6 @@
                data-ng-model="vm.file.surveyor_report"> Surveyor's Report
       </label>
     </div>
-
-
-
     <hr>
       <div class="row">
         <div class="col-md-6">
@@ -303,8 +314,11 @@
           data-ng-model="vm.file.remarks"></textarea>
       </div>
 
-      <button class="btn btn-success pull-right space-left">Submit</button>
-      <button class="btn btn-default pull-right">Cancel</button>
+      <button class="btn btn-success pull-right space-left"
+              data-ng-disabled="createForm.$invalid">Submit</button>
+      <button class="btn btn-default pull-right" data-ng-click="vm.resetForm()">
+        Cancel</button>
   </div>
 </div>
 </form>
+<hr>
