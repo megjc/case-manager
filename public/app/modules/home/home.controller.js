@@ -213,7 +213,6 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
-        //  console.log(vm.file);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
             vm.message = true;
