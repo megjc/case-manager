@@ -17,7 +17,7 @@
        * @return {[type]} [description]
        */
       function getFiles(){
-        return $http.get('/api/v1/files')
+        return $http.get('/case-manager/api/v1/files')
                     .then(handleSuccess)
                     .catch(handleError);
         function handleSuccess(response){ return response.data; }
@@ -25,7 +25,7 @@
       }
 
       function getFileById(id){
-        return $http.get('/api/v1/files/' + id)
+        return $http.get('/case-manager/api/v1/files/' + id)
                     .then(handleSuccess)
                     .catch(handleError);
         function handleSuccess(response){ return response.data; }
