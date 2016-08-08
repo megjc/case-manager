@@ -11,7 +11,8 @@
           setFormDefaults: setFormDefaults,
           getUsersByType: getUsersByType,
           getSystemLists: getSystemLists,
-          getFiles: getFiles
+          getFiles: getFiles,
+          getFileById: getFileById
       };
 
       return service;
@@ -67,6 +68,14 @@
                     .catch(handleError);
         function handleSuccess(response){ return response.data; }
         function handleError(error){ return error; }
+      }
+
+      function getFileById(id){
+        return $http.get('/api/v1/files/' + id)
+                    .then(handleSuccess)
+                    .catch(handleError);
+        function handleSuccess(response){ return response.data; }
+        function handleError(response){ return error; }
       }
       /**
        * Sets optional fields in file object

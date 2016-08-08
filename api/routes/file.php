@@ -9,7 +9,6 @@ function routeFileRequests($app){
 
   $app->post('/', function() use($app){
       $new_file = json_decode($app->request->getBody());
-      //test($new_file);
       $response = createFile($new_file);
       setResponseHeader($app);
       echo json_encode($response);
@@ -17,6 +16,12 @@ function routeFileRequests($app){
 
   $app->get('/', function() use($app){
       $response = getFiles();
+      setResponseHeader($app);
+      echo json_encode($response);
+  });
+
+  $app->get('/:id', function($id) use($app){
+      $response = getFileById($id);
       setResponseHeader($app);
       echo json_encode($response);
   });
@@ -82,9 +87,9 @@ function createFile($file){
       if($file->receipts[$len]->seen === "yes") $seen = 1;
       else $seen = 0;
       $stmt->execute(array(":seen" => $seen,
-                            ":currency_id" => $file->receipts[$len]->currency,
+                            ":currency_id" => $file->receipts[$len]->currency->id,
                             ":amount" => $file->receipts[$len]->amount,
-                            ":type_id" => $file->receipts[$len]->type,
+                            ":type_id" => $file->receipts[$len]->type->id,
                             ":acc_id" => $acc_id));
     }
     $stmt->closeCursor();
@@ -141,5 +146,54 @@ function getFiles(){
     $result = '{"error":{"text":' .$e->getMessage(). '}}';
   }
   return $result;
+}
+
+function getFileById($id){
+  $sql = "SELECT u.first_name as user_first_name,
+                 u.last_name as user_last_name,
+                 p.title as parish,
+                 f.acc_id,
+                 f.file_id,
+                 f.title,
+                 f.property_title,
+                 f.start_date,
+                 f.end_date,
+                 f.remarks,
+                 r.amount,
+                 r.type_id,
+                 c.iso_code as currency,
+                 rt.title as receipt_type,
+                 a.title as activity,
+                 o.volume,
+                 o.folio,
+                 o.name as owner_name,
+                 d.comp_agreement as compensation,
+                 d.sale_agreement as sale_agreement,
+                 d.cot as cot,
+                 d.lease_agreement as lease_agreement,
+                 d.map as map,
+                 d.surveyor_report as report,
+                 d.surveyor_drawing as drawing
+          FROM files as f
+          LEFT JOIN parishes as p ON f.parish = p.id
+          LEFT JOIN owners as o ON f.acc_id = o.acc_id
+          LEFT JOIN users as u ON f.createdBy = u.id
+          LEFT JOIN activity_types as a ON f.act_type_id = a.id
+          LEFT JOIN receipts as r ON f.acc_id = r.acc_id
+          LEFT JOIN receipt_types as rt ON r.type_id = rt.id
+          LEFT JOIN currencies as c ON r.currency_id = c.id
+          LEFT JOIN documents as d ON f.acc_id = d.acc_id
+          WHERE f.acc_id = :id";
+    try{
+      $db = openDBConnection();
+      $stmt = $db->prepare( $sql );
+      $stmt->bindValue("id", $id);
+      $stmt->execute();
+      $result = $stmt->fetch();
+      closeDBConnection( $db );
+    }catch(PDOException $e){
+      $result = '{"error":{"text":' .$e->getMessage(). '}}';
+    }
+    return $result;
 }
 ?>

@@ -3,9 +3,9 @@
     .module('home')
     .controller('Home', Home);
 
-    Home.$inject = ['homeService', '$window'];
+    Home.$inject = ['homeService', '$window', '$location'];
 
-    function Home(homeService, $window){
+    function Home(homeService, $window, $location){
         var vm = this;
         vm.acc_id = 0;
         vm.file = {};
@@ -36,12 +36,12 @@
         vm.show = show;
         vm.remove = remove;
         vm.processForm = processForm;
-        // vm.add = add;
         vm.append = append;
         vm.showControls = showControls;
         vm.dismiss = dismiss;
+        vm.showDetail = showDetail;
+        vm.resetForm = resetForm;
         vm.file = homeService.setFormDefaults();
-
         /**
          * Get lists of entities to be used by the form.
          * @return {[type]} [description]
@@ -184,8 +184,6 @@
               return;
           }
 
-          vm.message = true;
-          vm.error_message = false;
           vm.file.owners = vm.ownerList;
           vm.file.receipts = vm.receiptList;
 
@@ -215,8 +213,11 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
+        //  console.log(vm.file);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
+            vm.message = true;
+            vm.error_message = false;
             resetForm();
             $window.scrollTo(0,0);
           }).catch(function(error){
@@ -245,6 +246,16 @@
           vm.message = true;
           vm.hideControls = false;
           getLists();
+        }
+
+        function showDetail(id){
+          homeService.getFileById(id).then(function(file){
+            vm.file = file;
+            $location.path('/files/'+ id);
+            console.log(file);
+          }).catch(function(error){
+            vm.file = [];
+          })
         }
     }
 })();

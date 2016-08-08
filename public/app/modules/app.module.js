@@ -4,10 +4,11 @@
       'ngRoute',
       'ngMessages',
       'home',
+      'file',
       'shared-services'
   ]).config(config);
   /**
-   * Intercepts application requests and server responses 
+   * Intercepts application requests and server responses
    * @param  {[type]} $httpProvider [description]
    * @return {[type]}               [description]
    */

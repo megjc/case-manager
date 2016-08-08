@@ -1,18 +1,6 @@
 <div class="row">
-  <div class="col-md-2">
-    <!-- <div class="panel panel-default"></div> -->
-    <!-- <ul class="list-group">
-	        	<li class="list-group-item">
-              <a href data-ng-click="vm.show('create-view')">Create File</a>
-            </li>
-	            <li class="list-group-item">
-                <a href data-ng-click="vm.show('file-view')">View Files</a>
-              </li>
-	        </ul> -->
-    
-  </div>
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div data-ng-include="'public/app/partials/create-file.html'" data-ng-show="vm.create_view"></div>
     <div data-ng-include="'public/app/partials/view-file.html'" data-ng-show="vm.file_view"></div>
-  </div> <!-- end of content -->
+  </div>
 </div> <!-- end of sidebar -->
