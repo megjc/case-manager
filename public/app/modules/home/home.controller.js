@@ -42,7 +42,6 @@
         vm.showDetail = showDetail;
         vm.resetForm = resetForm;
         vm.file = homeService.setFormDefaults();
-
         /**
          * Get lists of entities to be used by the form.
          * @return {[type]} [description]
@@ -185,8 +184,6 @@
               return;
           }
 
-          vm.message = true;
-          vm.error_message = false;
           vm.file.owners = vm.ownerList;
           vm.file.receipts = vm.receiptList;
 
@@ -216,8 +213,11 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
+        //  console.log(vm.file);
            homeService.createFile(vm.file).then(function(response){
             vm.acc_id = response;
+            vm.message = true;
+            vm.error_message = false;
             resetForm();
             $window.scrollTo(0,0);
           }).catch(function(error){
