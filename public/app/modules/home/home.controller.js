@@ -9,10 +9,10 @@
         var vm = this;
         vm.acc_id = 0;
         vm.file = {};
-        vm.receipt = {
-          currency : "jmd",
-          seen: "no"
-        };
+        vm.receipt = "no";
+          //seen : "no"
+        //};
+
         vm.owner = {
           name: "",
           folio: "",
@@ -213,15 +213,23 @@
           if(vm.file.surveyor_report === undefined)
             vm.file.surveyor_report = 0;
 
-           homeService.createFile(vm.file).then(function(response){
-            vm.acc_id = response;
-            vm.message = true;
-            vm.error_message = false;
-            resetForm();
-            $window.scrollTo(0,0);
-          }).catch(function(error){
-            console.log('Error');
-          });
+          if(vm.receiptList.length < 1){
+            vm.owner_name = "none seen";
+            vm.folio = 0;
+            vm.volume = 0;
+          }
+
+          console.log(vm.file.receipt);
+          //console.log(vm.file);
+          //  homeService.createFile(vm.file).then(function(response){
+          //   vm.acc_id = response;
+          //   vm.message = true;
+          //   vm.error_message = false;
+          //   resetForm();
+          //   $window.scrollTo(0,0);
+          // }).catch(function(error){
+          //   console.log('Error');
+          // });
         }
         /**
          * Retrieve all files for view
