@@ -42,25 +42,33 @@ function createFile($file){
     $start_date = date_format($temp, "Y-m-d H:i:s");
     $temp = date_create($file->end_date);
     $end_date = date_format($temp,"Y-m-d H:i:s");
-    $sql_create_file = 'INSERT INTO files
-                        (file_id, start_date, end_date,
-                          parish, act_type_id, title, property_title,
-                          remarks, createdBy, created)
-                        VALUES (:file_id, :start_date, :end_date,
-                                :parish, :act_type_id, :title,
-                                :property_title, :remarks,
-                                :createdBy, NOW())';
+    $sql_create_file = 'INSERT INTO files (acc_id_man, start_date, end_date,
+                                          title, property_title, parish,
+                                          act_type_id, remarks, createdBy,
+                                          created, file_id, verified, verifiedBy,
+                                          box_ref)
+                        VALUES (:acc_id_man, :start_date, :end_date, :title,
+                                :property_title, :parish, :act_type_id, :remarks,
+                                :createdBy, :created, :file_id, :verified,
+                                :verifiedBy, :box_ref)';
+
     $stmt = $db->prepare($sql_create_file);
-    $stmt->execute(array(":file_id" => trim($file->file_id), //checked
+
+    $stmt->execute(array(":acc_id_man" => 9999,
                           ":start_date" => $start_date,
-                          ":end_date" => $end_date,//checked
-                          ":parish" => $file->parish, //checked
-                          ":act_type_id" => $file->activity, //checked
-                          ":title" => trim(strtolower($file->title)), //checked
+                          ":end_date" => $end_date,
+                          ":title" => trim(strtolower($file->title)),
                           ":property_title" => trim(strtolower($file->property_title)),
-                          ":remarks" => trim(strtolower($file->remarks)), //checked
-                          ":createdBy" => $file->createdBy //checked
-                          ));
+                          ":parish" => $file->parish,
+                          ":act_type_id" => $file->act_type_id,
+                          ":remarks" => trim(strtolower($file->remarks)),
+                          ":createdBy" => $file->createdBy,
+                          ":created" => $file->created,
+                          ":file_id" => $file->file_id,
+                          ":verified" => 0,
+                          ":verifiedBy" => 3,
+                          ":box_ref" => "none seen"));
+
     $acc_id = $db->lastInsertId();
     $stmt->closeCursor();
 
@@ -70,17 +78,17 @@ function createFile($file){
 
     $len = count($file->owners);
     while($len--){
-      // $name = explode(" ", $file->owners[$len]->name);
       $stmt->execute(array(":name" => trim(strtolower($file->owners[$len]->name)),
                             ":volume" => intval($file->owners[$len]->volume),
                             ":folio" => intval($file->owners[$len]->folio),
                             ":acc_id" => $acc_id));
     }
-    // $owner_id = $db->lastInsertId();
     $stmt->closeCursor();
-    //
-    $sql_create_receipt = 'INSERT INTO receipts (seen, currency_id, amount, type_id, acc_id)
-                           VALUES (:seen, :currency_id, :amount, :type_id, :acc_id)';
+
+    $sql_create_receipt = 'INSERT INTO receipts (seen, currency_id, amount,
+                                                  type_id, acc_id)
+                           VALUES (:seen, :currency_id, :amount, :type_id,
+                                   :acc_id)';
     $stmt = $db->prepare($sql_create_receipt);
     $len = count($file->receipts);
     while($len--){
@@ -93,7 +101,7 @@ function createFile($file){
                             ":acc_id" => $acc_id));
     }
     $stmt->closeCursor();
-    //
+
     $sql_create_document = 'INSERT INTO documents
                             (acc_id, comp_agreement, sale_agreement, cot,
                               lease_agreement, map, surveyor_drawing, surveyor_report)
@@ -153,6 +161,7 @@ function getFileById($id){
                  u.last_name as user_last_name,
                  p.title as parish,
                  f.acc_id,
+                 f.acc_id_man,
                  f.file_id,
                  f.title,
                  f.property_title,
@@ -189,7 +198,7 @@ function getFileById($id){
       $stmt = $db->prepare( $sql );
       $stmt->bindValue("id", $id);
       $stmt->execute();
-      $result = $stmt->fetch();
+      $result = $stmt->fetchObject();
       closeDBConnection( $db );
     }catch(PDOException $e){
       $result = '{"error":{"text":' .$e->getMessage(). '}}';

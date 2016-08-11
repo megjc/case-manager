@@ -20,6 +20,10 @@ $app->group('/v1', function() use ($app){
     $app->group('/sys_lists', function() use($app){
         getSystemLists($app);
     });
+
+    $app->group('/import', function() use($app){
+        routeImportRequests($app);
+    });
 }); //end of group
 /**
  * Run the Slim application

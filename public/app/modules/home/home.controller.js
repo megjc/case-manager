@@ -65,7 +65,7 @@
           vm.users = lists.users;
           vm.file.createdBy = vm.users[0].user_id;
           vm.activities = lists.activities;
-          vm.file.activity = vm.activities[1].id;
+          vm.file.act_type_id = vm.activities[1].id;
           vm.parishes = lists.parishes;
           vm.file.parish = vm.parishes[0].id;
           vm.currencies = lists.currencies;
@@ -218,18 +218,16 @@
             vm.folio = 0;
             vm.volume = 0;
           }
-
-          console.log(vm.file.receipt);
           //console.log(vm.file);
-          //  homeService.createFile(vm.file).then(function(response){
-          //   vm.acc_id = response;
-          //   vm.message = true;
-          //   vm.error_message = false;
-          //   resetForm();
-          //   $window.scrollTo(0,0);
-          // }).catch(function(error){
-          //   console.log('Error');
-          // });
+           homeService.createFile(vm.file).then(function(response){
+            vm.acc_id = response;
+            vm.message = true;
+            vm.error_message = false;
+            resetForm();
+            $window.scrollTo(0,0);
+          }).catch(function(error){
+            console.log('Error');
+          });
         }
         /**
          * Retrieve all files for view
@@ -259,10 +257,9 @@
           homeService.getFileById(id).then(function(file){
             vm.file = file;
             $location.path('/files/'+ id);
-            console.log(file);
           }).catch(function(error){
             vm.file = [];
-          })
+          });
         }
     }
 })();
